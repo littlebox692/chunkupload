@@ -20,6 +20,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Set;
 
 /**
  * Created by KelvinHuang on 18/10/7.
@@ -48,7 +49,11 @@ public class StorageServiceImpl implements StorageService {
 		logger.info("begin to clear data...");
 		FileSystemUtils.deleteRecursively(rootPath.toFile());
 		stringRedisTemplate.delete(Constants.FILE_UPLOAD_STATUS);
-		stringRedisTemplate.delete(Constants.FILE_MD5_KEY);
+		Set<String> keys = stringRedisTemplate.keys(Constants.FILE_MD5_KEY + "*");
+		for (String key :
+				keys) {
+			stringRedisTemplate.delete(key);
+		}
 		logger.info("finish clearing data...");
 	}
 
@@ -104,6 +109,7 @@ public class StorageServiceImpl implements StorageService {
 			logger.info("check part " + i + " complete?: " + completeList[i]);
 		}
 		accessConfFile.close();
+		logger.info("===========");
 		if (isComplete == Byte.MAX_VALUE) {
 			stringRedisTemplate.opsForHash().put(Constants.FILE_UPLOAD_STATUS, param.getMd5(), "ture");
 			stringRedisTemplate.opsForValue().set(Constants.FILE_MD5_KEY + param.getMd5(), uploadDirPath + "/" + fileName);
