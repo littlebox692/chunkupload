@@ -40,8 +40,6 @@ public class StorageServiceImpl implements StorageService {
 	private String finalDirPath;
 
 	public StorageServiceImpl(@Value("${breakpoint.upload.dir}") String location) {
-		logger.info("=============test location: " + location);
-
 		this.rootPath = Paths.get(location);
 	}
 
