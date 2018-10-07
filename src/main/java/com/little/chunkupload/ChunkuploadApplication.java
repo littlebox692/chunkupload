@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan
-@EnableAutoConfiguration
 public class ChunkuploadApplication {
 
 	public static void main(String[] args) {
